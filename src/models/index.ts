@@ -14,7 +14,7 @@ export interface Category {
 }
 
 export interface ItemDetails {
-    id: string | number,
+    id: number,
     category: string | number,
     title: string,
     images: string[],
@@ -34,7 +34,7 @@ export interface ItemDetails {
 }
 
 export interface CartItemModel {
-    id: string | number,
+    id: number,
     title: string,
     size: string,
     price: number,
@@ -47,7 +47,7 @@ export interface OrderModel {
         address: string,
     },
     items: {
-        id: number | string,
+        id: number,
         price: number,
         count: number,
     }[],

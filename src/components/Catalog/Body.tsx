@@ -1,3 +1,4 @@
+import { v4 as uuid4 } from 'uuid';
 import { useAppSelector } from '../../hooks';
 import Loader from '../Loader/Loader';
 import Error from '../Error';
@@ -22,7 +23,7 @@ export default function CatalogBody() {
     return (
         <div className='row'>
             {items.map((item) => (
-                <Card item={item} key={item.id + item.title} />
+                <Card item={item} key={uuid4()} />
             ))}
         </div>
     );

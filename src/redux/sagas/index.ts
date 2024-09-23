@@ -1,6 +1,6 @@
 import { createBrowserHistory } from 'history';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { delay, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import {
     GET_CATEGORY,
@@ -46,17 +46,17 @@ export function* getOrderSaga(action: PayloadAction<OrderModel>) {
     yield put(getOrderLoading());
 
     try {
-        const response: AxiosResponse = yield getOrderApi(action.payload);
-        console.log(response);
-
-        if (response.status > 200 && response.status < 300) {
-            yield put(getOrderSuccess());
-            yield delay(10000);
-            yield put(clearOrderSuccess());
-        }
+        yield getOrderApi(action.payload);
+        yield put(getOrderSuccess());
+        yield delay(10000);
+        yield put(clearOrderSuccess());
+        
     } catch (error) {
         yield put(
-            getItemFailed({ message: (error as Error).message, errFunc: action })
+            getItemFailed({ 
+                message: (error as Error).message,
+                errFunc: action 
+            })
         );
     }
 }
@@ -85,11 +85,10 @@ export function* getSearchSaga(action: PayloadAction<string>) {
     const categoryId: number = yield select((state) => state.activeCategoryId);
 
     try {
-        const payload: DataItem[] = yield getItemCategoryApi(
-            categoryId,
-            0,
-            action.payload
-        );
+        const payload: DataItem[] = yield getItemCategoryApi({
+            id: categoryId,
+            q: action.payload
+        });
 
         yield put(getCategoryItemsSuccess(payload));
     } catch (error) {
@@ -108,11 +107,11 @@ export function* getMoreItemsSaga(action: PayloadAction<string>) {
     const searchText: string = yield select((state) => state.searchText);
 
     try {
-        const payload: DataItem[] = yield getItemCategoryApi(
-            action.payload,
-            itemsList.length,
-            searchText
-        );
+        const payload: DataItem[] = yield getItemCategoryApi({
+            id: Number(action.payload),
+            offset: itemsList.length,
+            q: searchText
+        });
         if (payload.length < 6) yield put(setPostEnd());
 
         yield put(addMoreItems(payload));
@@ -131,11 +130,10 @@ export function* getItemsSaga(action: PayloadAction<string>) {
     const searchText: string = yield select((state) => state.searchText);
 
     try {
-        const payload: DataItem[] = yield getItemCategoryApi(
-            action.payload,
-            0,
-            searchText
-        );
+        const payload: DataItem[] = yield getItemCategoryApi({
+            id: Number(action.payload),
+            q: searchText
+        });
         yield put(getCategoryItemsSuccess(payload));
     } catch (error) {
         yield put(

@@ -13,13 +13,15 @@ export const getCategoriesApi = () => {
     return connect.get("/categories").then((response) => response.data);
 };
 
-export const getItemCategoryApi = (
-    id: string | number = 0,
-    offset: number = 0,
-    q: string = ""
-) => {
+interface ItemCategory {
+    id?: number,
+    offset?: number,
+    q?: string,
+}
+
+export const getItemCategoryApi = ({ id: categoryId, offset = 0, q }: ItemCategory = {}) => {
     return connect
-        .get("/items", { params: { categoryId: id, offset, q } })
+        .get("/items", { params: { categoryId, offset, q } })
         .then((response) => response.data);
 };
 
