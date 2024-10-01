@@ -85,7 +85,7 @@ const StoreSlice = createSlice({
         },
         getCategoriesSuccess(state, action: PayloadAction<Category[]>) {
             state.loading.categories = false;
-            state.categories = [{ title: 'Все', id: 0 }, ...action.payload];
+            state.categories = action.payload;
             state.error.categories = null;
         },
         getCategoryItemsSuccess(state, action: PayloadAction<DataItem[]>) {

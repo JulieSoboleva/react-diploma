@@ -151,7 +151,7 @@ export function* getCategorySaga(action: PayloadAction<string>) {
     try {
         const payload: DataItem[] = yield getCategoriesApi();
         yield put(getCategoriesSuccess(payload));
-    } catch (error) {
+     } catch (error) {
         yield put(
             getCategoriesFailed({
                 message: (error as Error).message,
