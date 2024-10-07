@@ -9,7 +9,9 @@ export default function Categories() {
     const isLoading = useAppSelector((state) => state.loading.categories);
     const isError = useAppSelector((state) => state.error.categories);
     
-    categories = [{ title: 'Все', id: 0 }, ...categories];
+    if (!isLoading && !isError) {
+        categories = [{ title: 'Все', id: 0 }, ...categories];
+    }
     
     return (
         <ul className='catalog-categories nav justify-content-center'>
